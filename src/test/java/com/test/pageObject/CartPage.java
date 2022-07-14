@@ -1,6 +1,10 @@
 package com.test.pageObject;
 
 import com.test.base.BaseTest;
+import com.test.rest.DeleteCartAPI;
+import com.test.rest.LoginApi;
+import com.test.rest.ViewCartApi;
+import com.test.rest.ViewDeviceDescriptionApi;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -43,7 +47,39 @@ public class CartPage extends BaseTest {
         element(placeOrderButton).click();
     }
 
+    public void verifyNumberOfItemsInTheCard(int expectedItemsNumber) {
+        int numberOfItemsInCart = ViewCartApi.withToken(getUserTokenApi()).getSizeOfItemsInCart();
+        assertThat(numberOfItemsInCart, equalTo(expectedItemsNumber));
+    }
+
+    public void verifyPriceOfTheSelectedPhone(int expectedItemPrice) {
+        int price = ViewDeviceDescriptionApi.withDeviceId(getProductIdInCart()).getPrice();
+        assertThat(price, equalTo(expectedItemPrice));
+    }
+
+    public void verifyTitleOfTheSelectedPhone(String expectedPhoneTitle) {
+        String deviceName = ViewDeviceDescriptionApi.withDeviceId(getProductIdInCart()).getTitle();
+        assertThat(deviceName, equalTo(expectedPhoneTitle));
+    }
+
+    public void verifyItemId(int expectedId) {
+        assertThat(getProductIdInCart(), equalTo(expectedId));
+    }
+
+    public void deleteCartApi() {
+        DeleteCartAPI.withCredentials(String.valueOf(session.get("username")));
+    }
+
     private int getExpectedTotalPrice(List<Integer> prices) {
         return prices.stream().mapToInt(Integer::intValue).sum();
+    }
+
+    private String getUserTokenApi() {
+        return LoginApi.withCredentials(String.valueOf(session.get("username")),
+                String.valueOf(session.get("password"))).getAuth_token();
+    }
+
+    private int getProductIdInCart() {
+        return ViewCartApi.withToken(getUserTokenApi()).getProductId();
     }
 }

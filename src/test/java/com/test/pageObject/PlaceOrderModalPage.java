@@ -54,6 +54,10 @@ public class PlaceOrderModalPage extends BaseTest {
         assertThat(getExpectedTotalPrice(priceValues), equalTo(summaryTotalPrice));
     }
 
+    public void clickOkOnSubmissionModal() {
+        element(okOrderSubmitButton).click();
+    }
+
     private int getExpectedTotalPrice(List<Integer> prices) {
         return prices.stream().mapToInt(Integer::intValue).sum();
     }

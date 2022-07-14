@@ -13,6 +13,7 @@ public class HomePage extends BaseTest {
 
     public final By signUpButton = By.id("signin2");
     public final By loginTopMenuButton = By.cssSelector("#login2");
+    public final By logoutTopMenuButton = By.xpath("//a[@id='logout2']");
     public final By nameOfUser = By.xpath("//a[@id='nameofuser']");
     public final By nextPageButton = By.xpath("//button[@id='next2']");
     public final By mainLogoButton = By.xpath("//a[@id='nava']");
@@ -47,6 +48,10 @@ public class HomePage extends BaseTest {
 
     public void clickTopLogo() {
         element(mainLogoButton).click();
+    }
+
+    public void clickLogOut() {
+        element(logoutTopMenuButton).click();
     }
 
     public void clickCartTopMenu() {
