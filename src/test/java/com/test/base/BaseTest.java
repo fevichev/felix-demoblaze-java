@@ -1,39 +1,46 @@
 package com.test.base;
 
 import com.github.javafaker.Faker;
-import com.test.UI.GeneralPageUi;
+import com.test.pageObject.CartPage;
+import com.test.pageObject.DevicePage;
+import com.test.pageObject.HomePage;
+import com.test.pageObject.LoginModalPage;
+import com.test.pageObject.PlaceOrderModalPage;
+import com.test.pageObject.SignUpModalPage;
+import com.test.utils.Helper;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.with;
-
 public class BaseTest {
 
-    public WebDriver driver;
-    public Faker faker;
-    String baseUrl;
+    public static WebDriver driver;
+    public static Faker faker;
     public Properties prop;
-    public GeneralPageUi generalPageUi;
-    public WebDriverWait wait;
+    public static SignUpModalPage signUpModalPage;
+    public static LoginModalPage loginModalPage;
+    public static HomePage homePage;
+    public static DevicePage devicePage;
+    public static CartPage cartPage;
+    public static PlaceOrderModalPage placeOrderModalPage;
+    public static WebDriverWait wait;
+    public String baseUrl;
+    public static Helper helper;
 
     public static Map<String, Object> session = new HashMap<>();
+    public static List<Integer> priceValues = new ArrayList<>();
 
     public BaseTest() {
         try {
@@ -76,9 +83,15 @@ public class BaseTest {
     }
 
     public void initObjects() {
-        generalPageUi = new GeneralPageUi();
         faker = new Faker();
         wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+        signUpModalPage = new SignUpModalPage();
+        loginModalPage = new LoginModalPage();
+        homePage = new HomePage();
+        devicePage = new DevicePage();
+        cartPage = new CartPage();
+        placeOrderModalPage = new PlaceOrderModalPage();
+        helper = new Helper();
     }
 
     public void closeBrowser() {
@@ -94,27 +107,4 @@ public class BaseTest {
         }
     }
 
-    public WebElement element(By ByElement) {
-        WebElement e = driver.findElement(ByElement);
-        with().pollDelay(100, MILLISECONDS).await().atMost
-                (5, SECONDS).until(e::isDisplayed);
-        return driver.findElement(ByElement);
-    }
-
-    public List<WebElement> elements(By ByElement) {
-        WebElement e = driver.findElement(ByElement);
-        with().pollDelay(100, MILLISECONDS).await().atMost
-                (5, SECONDS).until(e::isDisplayed);
-        return driver.findElements(ByElement);
-    }
-
-    public String getTextOfAlert() {
-        wait.until(ExpectedConditions.alertIsPresent());
-        return driver.switchTo().alert().getText();
-    }
-
-    public void acceptAlertMessage() {
-        wait.until(ExpectedConditions.alertIsPresent());
-        driver.switchTo().alert().accept();
-    }
 }
