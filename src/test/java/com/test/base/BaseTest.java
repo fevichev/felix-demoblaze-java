@@ -15,7 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -30,6 +32,8 @@ public class BaseTest {
     public Properties prop;
     public GeneralPageUi generalPageUi;
     public WebDriverWait wait;
+
+    public static Map<String, Object> session = new HashMap<>();
 
     public BaseTest() {
         try {
@@ -102,11 +106,6 @@ public class BaseTest {
         with().pollDelay(100, MILLISECONDS).await().atMost
                 (5, SECONDS).until(e::isDisplayed);
         return driver.findElements(ByElement);
-    }
-
-    public static void waitVisibleElement(WebElement element, int seconds) {
-        with().pollDelay(100, MILLISECONDS).await().atMost
-                (seconds, SECONDS).until(element::isDisplayed);
     }
 
     public String getTextOfAlert() {
