@@ -3,8 +3,8 @@ package com.test.tests;
 import com.test.base.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -40,7 +40,6 @@ public class UiDemoBlazeTest extends BaseTest {
     private final By devicePriceContainer = By.xpath("//*[@id='tbodyid']/h3");
     private final By totalPriceText = By.xpath("//h3[@id='totalp']");
     private final By placeOrderButton = By.xpath("//button[contains(text(),'Place Order')]");
-    //order
     private final By nameOrderTextBox = By.xpath("//input[@id='name']");
     private final By countryOrderTextBox = By.xpath("//input[@id='country']");
     private final By cityOrderTextBox = By.xpath("//input[@id='city']");
@@ -52,45 +51,50 @@ public class UiDemoBlazeTest extends BaseTest {
     private final By orderDescriptionText = By.xpath("//body/div[10]/p[1]");
     private final By okOrderSubmitButton = By.xpath("//button[contains(text(),'OK')]");
     private final By allDevicesInCart = By.xpath("//tbody/tr");
-    private static final String ALERT_MESSAGE = "Sign up successful.";
-    private static final String PRODUCT_ADDED_ALERT_MESSAGE = "Product added.";
 
     private By deviceWithName(String deviceName) {
         return By.xpath("//a[contains(text(),'" + deviceName + "')]");
     }
 
-    private List<Integer> priceValues = new ArrayList<>();
-    String username = faker.internet().emailAddress();
-    String password = faker.internet().password();
+    private static final String ALERT_MESSAGE = "Sign up successful.";
+    private static final String PRODUCT_ADDED_ALERT_MESSAGE = "Product added.";
 
-    @BeforeTest
+    private List<Integer> priceValues = new ArrayList<>();
+
+    @BeforeClass
     public void setup() {
         initialization();
     }
 
-    @Test
+    @Test(priority = 1, testName = "Create new user verification")
     public void signUpTest() {
+        String username = faker.internet().emailAddress();
+        String password = faker.internet().password();
+        session.put("username", username);
+        session.put("password", password);
+
         element(generalPageUi.signUpButton).click();
         element(usernameTextBox).clear();
         element(usernameTextBox).sendKeys(username);
         element(passwordTextBox).sendKeys(password);
         element(signUpButtonModal).click();
+
         assertThat(getTextOfAlert(), equalTo(ALERT_MESSAGE));
         acceptAlertMessage();
     }
 
-    @Test
+    @Test(priority = 2, testName = "Login to the system verification")
     public void loginTest() {
         element(loginTopMenuButton).click();
-        element(loginUsernameTextBox).sendKeys(username);
-        element(loginPasswordTextBox).sendKeys(password);
+        element(loginUsernameTextBox).sendKeys(String.valueOf(session.get("username")));
+        element(loginPasswordTextBox).sendKeys(String.valueOf(session.get("password")));
         element(loginButton).click();
 
         given().ignoreExceptions().await().until(() -> element(nameOfUser).isDisplayed());
-        assertThat(element(nameOfUser).getText(), endsWith(username));
+        assertThat(element(nameOfUser).getText(), endsWith(String.valueOf(session.get("username"))));
     }
 
-    @Test
+    @Test(priority = 3, testName = "Add to cart 2 devices verification")
     public void addToCartTest() {
         addDeviceToCart("Nexus 6");
         addDeviceToCart("MacBook Pro");
@@ -100,7 +104,7 @@ public class UiDemoBlazeTest extends BaseTest {
         assertThat(elements(allDevicesInCart).size(), comparesEqualTo(2));
     }
 
-    @Test
+    @Test(priority = 4, testName = "Move to Cart verification")
     public void cartTest() {
         Map<String, Integer> expectedValueInCart = Map.of("Nexus 6", 650, "MacBook Pro", 1100);
         Map<String, Integer> actualValuesInCart = new HashMap<>();
@@ -112,7 +116,7 @@ public class UiDemoBlazeTest extends BaseTest {
         assertThat(expectedValueInCart.entrySet(), everyItem(is(in(actualValuesInCart.entrySet()))));
     }
 
-    @Test
+    @Test(priority = 5, testName = "Place an order verification")
     public void placeOrderTest() {
         String name = faker.funnyName().name();
         String country = faker.country().countryCode2();
@@ -159,7 +163,7 @@ public class UiDemoBlazeTest extends BaseTest {
         return prices.stream().mapToInt(Integer::intValue).sum();
     }
 
-    @AfterTest
+    @AfterClass
     public void teardown() {
         closeBrowser();
     }
