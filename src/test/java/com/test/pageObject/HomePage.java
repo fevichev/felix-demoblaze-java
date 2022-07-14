@@ -4,6 +4,7 @@ import com.test.base.BaseTest;
 import org.openqa.selenium.By;
 
 import static com.test.utils.Helper.element;
+import static com.test.utils.Helper.sleep;
 import static org.awaitility.Awaitility.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
@@ -49,6 +50,7 @@ public class HomePage extends BaseTest {
     }
 
     public void clickCartTopMenu() {
+        sleep(1);
         element(cartTopMenuButton).click();
     }
 }

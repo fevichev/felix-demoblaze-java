@@ -27,6 +27,14 @@ public class Helper extends BaseTest {
         return driver.findElements(ByElement);
     }
 
+    public static void sleep(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void acceptAlertMessage() {
         wait.until(ExpectedConditions.alertIsPresent());
         driver.switchTo().alert().accept();
