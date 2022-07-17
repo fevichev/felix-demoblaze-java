@@ -6,7 +6,9 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class UiDemoBlazeTest extends BaseTest {
+import static com.test.utils.ReportingHelper.publishReport;
+
+public class UiApiDemoBlazeTest extends BaseTest {
 
     @BeforeClass
     public void setup() {
@@ -95,6 +97,7 @@ public class UiDemoBlazeTest extends BaseTest {
     @AfterClass
     public void teardown() {
         closeBrowser();
+        publishReport();
     }
 
     @AfterGroups(groups = {"UI"})

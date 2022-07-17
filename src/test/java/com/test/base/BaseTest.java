@@ -8,14 +8,15 @@ import com.test.pageObject.LoginModalPage;
 import com.test.pageObject.PlaceOrderModalPage;
 import com.test.pageObject.SignUpModalPage;
 import com.test.utils.Helper;
+import com.test.utils.ReportingHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Reporter;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class BaseTest {
 
     public static WebDriver driver;
     public static Faker faker;
-    public Properties prop;
+    public static Properties prop;
     public static SignUpModalPage signUpModalPage;
     public static LoginModalPage loginModalPage;
     public static HomePage homePage;
@@ -38,6 +39,7 @@ public class BaseTest {
     public static WebDriverWait wait;
     public String baseUrl;
     public static Helper helper;
+    public static ReportingHelper reportingHelper;
 
     public static Map<String, Object> session = new HashMap<>();
     public static List<Integer> priceValues = new ArrayList<>();
@@ -47,15 +49,13 @@ public class BaseTest {
             prop = new Properties();
             FileInputStream ip = new FileInputStream(System.getProperty("user.dir") + "/config.properties");
             prop.load(ip);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void initialization() {
-        String driverName = prop.getProperty("browserName");
+        String driverName = prop.getProperty("browser.name");
         switch (driverName.toLowerCase()) {
             case ("chrome"):
                 driver = WebDriverManager.chromedriver().create();
@@ -77,7 +77,7 @@ public class BaseTest {
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(4));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5));
 
-        baseUrl = prop.getProperty("url");
+        baseUrl = prop.getProperty("base.url");
         driver.get(baseUrl);
         initObjects();
     }
@@ -92,6 +92,7 @@ public class BaseTest {
         cartPage = new CartPage();
         placeOrderModalPage = new PlaceOrderModalPage();
         helper = new Helper();
+        reportingHelper = new ReportingHelper();
     }
 
     public void closeBrowser() {
@@ -99,12 +100,14 @@ public class BaseTest {
             try {
                 driver.close();
                 driver.quit();
-            } catch (NoSuchMethodError nsme) {
-            } catch (NoSuchSessionException nsse) {
-            } catch (SessionNotCreatedException snce) {
-                throw new RuntimeException(snce);
+            } catch (NoSuchMethodError | NoSuchSessionException | SessionNotCreatedException e) {
+                throw new RuntimeException(e);
             }
         }
+    }
+
+    protected static void logMessage(String message) {
+        Reporter.log(message, true);
     }
 
 }

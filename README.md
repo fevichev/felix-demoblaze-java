@@ -1,6 +1,5 @@
 ## Automation project to test UI/API [demoblaze](https://www.demoblaze.com/) website.
 
----
 Тhe following frameworks have been used in the creation of this project
 
 ```
@@ -18,11 +17,11 @@ The following Libraries have been used to make writing this test easier
 - Hamcrest - Core API and libraries of hamcrest matcher.
 - Jackson-databind - Basic data binding (mapping) library that allows for reading JSON content.
 - Allure-testng - Flexible lightweight multi-language test report tool.
+- Test Results Reporter - Can publish test results to Microsoft Teams, Slack, Google Chat and many more
 ```
 
 ## How to run
 
----------
 You could use the following Maven command
 > mvn test
 
@@ -30,7 +29,7 @@ You could use the following Maven command
 
 You can run tests with different browsers. To run tests with specific browser you can change property value in
 this [config.properties](config.properties) file.
-> browserName=chrome
+> browser.name=chrome
 
 Available browsers are:
 
@@ -40,14 +39,28 @@ safari
 firefox
 ```
 
-<p style='color:red'>Note: Selected browser should be installed on your local machine.</p>
+<p style='color:green'>Note: Selected browser should be installed on your local machine.</p>
 
 # Reporting
-
----------
 
 ## Generate Allure Report
 
 You can generate a report using this Maven command:
 
 > mvn allure:serve
+
+## Generate Report to your slack channel
+
+<p style='color:green'>Note: You need to install Node.js 10 or above on your local machine.</p>
+
+- Please create Slack webhook application and link it to your channel. (How to do
+  this, you can watch video... [Link to YouTube video](https://www.youtube.com/watch?v=6NJuntZSJVA))
+- Copy webhook link and paste it to [config.json](config.json) file as following:
+
+> "url": "https://hooks.slack.com/services/AAAAAAAAAAA/BBBBBBBBBBB/XXXXXXXXXXXXXXX",
+
+- Change to `true` in [config.properties](config.properties) file as following:
+
+> publish.report=true
+
+- As a result you will receive a message to your channel.

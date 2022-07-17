@@ -1,0 +1,21 @@
+{
+  "reports": [
+    {
+      "targets": [
+        {
+          "name": "slack",
+          "inputs": {
+            "url": "<Place your Slack webhook link here>",
+            "publish": "test-summary-pog"
+          }
+        }
+      ],
+      "results": [
+        {
+          "type": "testng",
+          "files": ["target/surefire-reports/testng-results.xml"]
+        }
+      ]
+    }
+  ]
+}
