@@ -55,11 +55,11 @@ You can generate a report using this Maven command:
 
 - Please create Slack webhook application and link it to your channel. (How to do
   this, you can watch video... [Link to YouTube video](https://www.youtube.com/watch?v=6NJuntZSJVA))
-- Copy webhook link and paste it to [config.json](config.json) file as following:
+- Copy webhook link and paste it to [config.json](config.json) file as follows:
 
 > "url": "https://hooks.slack.com/services/AAAAAAAAAAA/BBBBBBBBBBB/XXXXXXXXXXXXXXX",
 
-- Change to `true` in [config.properties](config.properties) file as following:
+- Change to `true` in [config.properties](config.properties) file as follows:
 
 > publish.report=true
 
