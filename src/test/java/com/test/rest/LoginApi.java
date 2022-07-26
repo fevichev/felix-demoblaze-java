@@ -10,16 +10,13 @@ import static io.restassured.RestAssured.given;
 public class LoginApi extends BaseTest {
 
     private static final String PATH = "/login";
-    private final String username;
-    private final String password;
     private final String auth_token;
 
     public LoginApi(String username, String password) {
-        this.username = username;
-        this.password = getEncodedPasswordToBase64(password);
+        String password1 = getEncodedPasswordToBase64(password);
 
         String baseServerUrl = prop.getProperty("base.api.url");
-        String jsonBody = "{\"username\":\"" + this.username + "\",\"password\":\"" + this.password + "\"}";
+        String jsonBody = "{\"username\":\"" + username + "\",\"password\":\"" + password1 + "\"}";
 
         ValidatableResponse response = given()
                 .contentType(ContentType.JSON)

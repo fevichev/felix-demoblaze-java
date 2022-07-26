@@ -10,14 +10,12 @@ public class ViewDeviceDescriptionApi extends BaseTest {
 
     private final String title;
     private final String price;
-    private final int deviceId;
-    private String baseServerUrl = prop.getProperty("base.api.url");
     private static final String PATH = "/view";
 
     public ViewDeviceDescriptionApi(int deviceId) {
-        this.deviceId = deviceId;
-        String jsonBody = "{\"id\":\"" + this.deviceId + "\"}";
+        String jsonBody = "{\"id\":\"" + deviceId + "\"}";
 
+        String baseServerUrl = prop.getProperty("base.api.url");
         ValidatableResponse response = given()
                 .contentType(ContentType.JSON)
                 .body(jsonBody)

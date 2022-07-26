@@ -39,7 +39,6 @@ public class HomePage extends BaseTest {
     public void selectDeviceFromList(String deviceName) {
         try {
             element(deviceWithName(deviceName)).click();
-
         } catch (Exception e) {
             element(nextPageButton).click();
             element(deviceWithName(deviceName)).click();
