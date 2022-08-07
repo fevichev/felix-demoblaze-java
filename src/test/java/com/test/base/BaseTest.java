@@ -7,13 +7,16 @@ import com.test.pageObject.HomePage;
 import com.test.pageObject.LoginModalPage;
 import com.test.pageObject.PlaceOrderModalPage;
 import com.test.pageObject.SignUpModalPage;
-import com.test.utils.Helper;
+import com.test.utils.GetPage;
 import com.test.utils.ReportingHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Reporter;
 
 import java.io.FileInputStream;
@@ -27,28 +30,39 @@ import java.util.Properties;
 
 public class BaseTest {
 
-    public static WebDriver driver;
-    public static Faker faker;
+    public WebDriver driver;
+    public Faker faker;
     public static Properties prop;
-    public static SignUpModalPage signUpModalPage;
-    public static LoginModalPage loginModalPage;
-    public static HomePage homePage;
-    public static DevicePage devicePage;
-    public static CartPage cartPage;
-    public static PlaceOrderModalPage placeOrderModalPage;
-    public static WebDriverWait wait;
+    public SignUpModalPage signUpModalPage;
+    public LoginModalPage loginModalPage;
+    public HomePage homePage;
+    public DevicePage devicePage;
+    public CartPage cartPage;
+    public PlaceOrderModalPage placeOrderModalPage;
     public String baseUrl;
-    public static Helper helper;
-    public static ReportingHelper reportingHelper;
+    public GetPage getPage;
+    public ReportingHelper reportingHelper;
 
     public static Map<String, Object> session = new HashMap<>();
     public static List<Integer> priceValues = new ArrayList<>();
+
+    public BaseTest(WebDriver driver) {
+        this.driver = driver;
+    }
 
     public BaseTest() {
         try {
             prop = new Properties();
             FileInputStream ip = new FileInputStream(System.getProperty("user.dir") + "/config.properties");
             prop.load(ip);
+
+            for (String propertyName : prop.stringPropertyNames()) {
+                String systemPropertyValue = System.getProperty(propertyName);
+
+                if (systemPropertyValue != null) {
+                    prop.setProperty(propertyName, systemPropertyValue);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,9 +70,20 @@ public class BaseTest {
 
     public void initialization() {
         String driverName = prop.getProperty("browser.name");
+        String isHeadless = prop.getProperty("browser.headless");
         switch (driverName.toLowerCase()) {
             case ("chrome"):
-                driver = WebDriverManager.chromedriver().create();
+                if (isHeadless.matches("true")){
+                    WebDriverManager.chromedriver().setup();
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.addArguments("--no-sandbox");
+                    chromeOptions.addArguments("--headless");
+                    chromeOptions.addArguments("disable-gpu");
+                    driver = new ChromeDriver(chromeOptions);
+                }
+                else {
+                    driver = WebDriverManager.chromedriver().create();
+                }
                 break;
             case ("safari"):
                 driver = WebDriverManager.safaridriver().create();
@@ -84,15 +109,14 @@ public class BaseTest {
 
     public void initObjects() {
         faker = new Faker();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        signUpModalPage = new SignUpModalPage();
-        loginModalPage = new LoginModalPage();
-        homePage = new HomePage();
-        devicePage = new DevicePage();
-        cartPage = new CartPage();
-        placeOrderModalPage = new PlaceOrderModalPage();
-        helper = new Helper();
-        reportingHelper = new ReportingHelper();
+        signUpModalPage = new SignUpModalPage(driver);
+        loginModalPage = new LoginModalPage(driver);
+        homePage = new HomePage(driver);
+        devicePage = new DevicePage(driver);
+        cartPage = new CartPage(driver);
+        placeOrderModalPage = new PlaceOrderModalPage(driver);
+        getPage = new GetPage(driver);
+        reportingHelper = new ReportingHelper(driver);
     }
 
     public void closeBrowser() {
@@ -106,8 +130,15 @@ public class BaseTest {
         }
     }
 
+    public WebElement element(By ByElement) {
+        return driver.findElement(ByElement);
+    }
+
+    public List<WebElement> elements(By ByElement) {
+        return driver.findElements(ByElement);
+    }
+
     protected static void logMessage(String message) {
         Reporter.log(message, true);
     }
-
 }

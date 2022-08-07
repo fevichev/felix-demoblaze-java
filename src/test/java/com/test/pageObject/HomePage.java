@@ -1,17 +1,16 @@
 package com.test.pageObject;
 
-import com.test.base.BaseTest;
+import com.test.utils.GetPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
-import static com.test.utils.Helper.element;
-import static com.test.utils.Helper.sleep;
 import static org.awaitility.Awaitility.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 
-public class HomePage extends BaseTest {
-
+public class HomePage extends GetPage {
     public final By signUpButton = By.id("signin2");
+
     public final By loginTopMenuButton = By.cssSelector("#login2");
     public final By logoutTopMenuButton = By.xpath("//a[@id='logout2']");
     public final By nameOfUser = By.xpath("//a[@id='nameofuser']");
@@ -23,6 +22,10 @@ public class HomePage extends BaseTest {
         return By.xpath("//a[contains(text(),'" + deviceName + "')]");
     }
 
+    public HomePage(WebDriver driver) {
+        super(driver);
+    }
+
     public void clickSignUpButton() {
         element(signUpButton).click();
     }
@@ -31,7 +34,7 @@ public class HomePage extends BaseTest {
         element(loginTopMenuButton).click();
     }
 
-    public void verifyUserIsLogedIn() {
+    public void verifyUserIsLoggedIn() {
         given().ignoreExceptions().await().until(() -> element(nameOfUser).isDisplayed());
         assertThat(element(nameOfUser).getText(), endsWith(String.valueOf(session.get("username"))));
     }

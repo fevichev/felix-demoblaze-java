@@ -1,19 +1,18 @@
 package com.test.pageObject;
 
-import com.test.base.BaseTest;
 import com.test.rest.DeleteCartAPI;
 import com.test.rest.LoginApi;
 import com.test.rest.ViewCartApi;
 import com.test.rest.ViewDeviceDescriptionApi;
+import com.test.utils.GetPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.test.utils.Helper.element;
-import static com.test.utils.Helper.elements;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.equalTo;
@@ -21,13 +20,18 @@ import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
 
-public class CartPage extends BaseTest {
+public class CartPage extends GetPage {
 
     public final By totalPriceText = By.xpath("//h3[@id='totalp']");
     public final By allDevicesInCart = By.xpath("//tbody/tr");
     public final By placeOrderButton = By.xpath("//button[contains(text(),'Place Order')]");
 
+    public CartPage(WebDriver driver) {
+        super(driver);
+    }
+
     public void verifyCartHasSelectedDevices() {
+        sleep(1);
         assertThat(getExpectedTotalPrice(priceValues), equalTo(Integer.parseInt(element(totalPriceText).getText())));
         assertThat(elements(allDevicesInCart).size(), comparesEqualTo(2));
     }

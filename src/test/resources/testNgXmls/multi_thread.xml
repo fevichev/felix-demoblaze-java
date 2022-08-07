@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite
+        name="Application Test Automation Test Suite Multi Thread"
+        thread-count="2"
+        parallel="tests">
+
+    <test name="First App Test Cases">
+        <classes>
+            <class name="com.test.tests.UiApiDemoBlazeTest"/>
+        </classes>
+    </test>
+
+    <test name="Second App Test Cases Multi Thread">
+        <classes>
+            <class name="com.test.tests.UiApiDemoBlaze2Test"/>
+        </classes>
+    </test>
+</suite>

@@ -1,16 +1,16 @@
 package com.test.pageObject;
 
-import com.test.base.BaseTest;
+import com.test.utils.GetPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
-import static com.test.utils.Helper.element;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.assertTrue;
 
-public class PlaceOrderModalPage extends BaseTest {
+public class PlaceOrderModalPage extends GetPage {
 
     public final By nameOrderTextBox = By.xpath("//input[@id='name']");
     public final By countryOrderTextBox = By.xpath("//input[@id='country']");
@@ -22,6 +22,10 @@ public class PlaceOrderModalPage extends BaseTest {
     public final By thankYouText = By.xpath("//h2[contains(text(),'Thank you for your purchase!')]");
     public final By okOrderSubmitButton = By.xpath("//button[contains(text(),'OK')]");
     public final By orderDescriptionText = By.xpath("//body/div[10]/p[1]");
+
+    public PlaceOrderModalPage(WebDriver driver) {
+        super(driver);
+    }
 
     public void populateOrderFields() {
         String name = faker.funnyName().name();
@@ -55,6 +59,7 @@ public class PlaceOrderModalPage extends BaseTest {
     }
 
     public void clickOkOnSubmissionModal() {
+        sleep(2);
         element(okOrderSubmitButton).click();
     }
 

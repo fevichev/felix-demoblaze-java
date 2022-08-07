@@ -23,7 +23,10 @@ The following Libraries have been used to make writing this test easier
 ## How to run
 
 You could use the following Maven command
-> mvn test
+> mvn -Dtest=UiApiDemoBlazeTest test
+
+To run with headless browser
+> mvn test -Dbrowser.headless=true
 
 ## Cross-browser testing
 
@@ -63,4 +66,10 @@ You can generate a report using this Maven command:
 
 > publish.report=true
 
+or set System variable when running a test
+> -Dpublish.report=true
+
 - As a result you will receive a message to your channel.
+
+Ultimate command to run test
+> mvn -Dtest=UiApiDemoBlazeTest -Dpublish.report=true -Dbrowser.headless=true test

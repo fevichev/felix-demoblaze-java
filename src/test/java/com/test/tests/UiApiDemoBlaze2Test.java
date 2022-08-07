@@ -6,9 +6,10 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static com.test.utils.GetPage.sleep;
 import static com.test.utils.ReportingHelper.publishReport;
 
-public class UiApiDemoBlazeTest extends BaseTest {
+public class UiApiDemoBlaze2Test extends BaseTest {
 
     @BeforeClass
     public void setup() {
@@ -22,6 +23,7 @@ public class UiApiDemoBlazeTest extends BaseTest {
         session.put("username", username);
         session.put("password", password);
 
+        sleep(4);
         homePage.clickSignUpButton();
         signUpModalPage.populateUsernameAndPassword(username, password);
         signUpModalPage.verifyAlertMessage();
