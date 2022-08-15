@@ -52,7 +52,7 @@ You can generate a report using this Maven command:
 
 > mvn allure:serve
 
-## Generate Report to your slack channel
+## Generate Report to your Slack channel
 
 <p style='color:green'>Note: You need to install Node.js 10 or above on your local machine.</p>
 
