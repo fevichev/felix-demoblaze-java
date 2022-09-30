@@ -12,6 +12,7 @@ public class ReportingHelper extends BaseTest {
     public ReportingHelper(WebDriver driver) {
         super(driver);
     }
+
     public static void publishReport() {
         if (prop.getProperty("publish.report").matches("true")) {
             executeCommandLineInTerminal("npm i test-results-reporter");
